@@ -4048,3 +4048,9 @@ figcaption {
     grid-row-end: 3;
   }
 }
+
+.w-webflow-badge {
+  position: fixed !important;
+  display: None !important;
+  visibility: hidden !important;
+}
