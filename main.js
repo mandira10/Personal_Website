@@ -68,7 +68,7 @@ document.querySelector('.language-dropdown .language-link').addEventListener('cl
 });
 
 function replaceWordsInTextNodes() {
-    var wordsToReplace = ['Java', 'Javascript', 'Angular', 'React', 'Python', 'ML algorithms', 'ML-Algorithmen', 'HTML', 'CSS', 'SQL', 'Hibernate', 'JavaScript', 'University of Bremen', 'computer science', 'Git'];
+    var wordsToReplace = ['Java', 'Javascript', 'Angular', 'React', 'Python', 'ML algorithms', 'ML-Algorithmen', 'ML algoritmaları', 'HTML', 'CSS', 'SQL', 'Hibernate', 'JavaScript', 'University of Bremen', 'computer science', 'Informatik', 'bilgisayar bilimi', 'Git'];
     var regExp = new RegExp('\\b(' + wordsToReplace.join('|') + ')\\b', 'g');
 
     function replaceWordsInNode(node) {
