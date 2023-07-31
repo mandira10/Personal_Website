@@ -837,13 +837,15 @@ padding-bottom: 5%;
 
 .container2 {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     padding-right: 5%;
     padding-left: 5%;
-    padding-top: 5%;
+    padding: 5%;
     gap: 10px;
+    background-color: #121212;
 }
 
 .container3 {
@@ -870,10 +872,102 @@ padding-bottom: 5%;
 }
 
 .loading img {
-    transition: filter 6s ease;
+    transition: filter 3s ease;
     filter: grayscale(100%);
 }
 
 .loading img:hover {
-    filter: grayscale(50%);
+    filter: grayscale(33%);
+}
+
+.header-right .language-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.header-right .flags {
+  display: none; /* Initially hidden */
+  position: absolute;
+  background-color: #1A1A1A;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.header-right .flags a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.header-right .language-dropdown.active .flags {
+  display: block; /* Displayed when the 'active' class is added */
+}
+
+.projects ul li img {
+  width: 50%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.projects ul li {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  text-align: center;
+  align-items: center;
+  justify-content: start;
+  color: #A3A3A3;
+  padding: 1%;
+}
+
+.projects p {
+width: 50%;
+}
+
+
+
+.projects {
+  text-align: center;
+}
+
+.projects ul {
+display: flex;
+flex-wrap: wrap;
+justify-content: space-between;
+width: 100%;
+}
+
+img {
+  overflow-clip-margin: content-box;
+  overflow: clip;
+}
+
+@media (max-width: 600px) {
+  .projects ul li {
+    width: 100%;
+  }
+}
+
+
+.header {
+  transition: all 0.3s ease-in-out;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0.975; /* Initially visible */
+  visibility: visible;
+  background-color: #1A1A1A;
+  z-index: 3;
+}
+
+.header-hidden {
+  opacity: 0; /* Hidden when the class is added */
+  visibility: hidden;
+}
+
+
+.language-link {
+  cursor: pointer; /* Makes it look like a clickable link */
 }
