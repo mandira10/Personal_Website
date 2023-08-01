@@ -938,7 +938,7 @@ img {
 
 @media (max-width: 600px) {
   .projects ul li {
-    width: 100%;
+    width: 80%;
   }
 }
 
