@@ -905,38 +905,30 @@ padding-bottom: 5%;
   display: block; /* Displayed when the 'active' class is added */
 }
 
-.projects ul li img {
-  width: 50%;
+.projects img{
+  width: 100%;
   height: auto;
   border-radius: 10px;
 }
 
-.projects ul li {
+.projects li {
   display: flex;
   flex-direction: column;
-  width: 50%;
   text-align: center;
-  align-items: center;
-  justify-content: start;
   color: #A3A3A3;
   padding: 1%;
-}
-
-.projects p {
-width: 50%;
-}
-
-
-
-.projects {
-  text-align: center;
+  width: 35%;
 }
 
 .projects ul {
-display: flex;
-flex-wrap: wrap;
-justify-content: space-between;
-width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  padding-inline-start: 0px;
+}
+
+.projects p, .projects h3 {
+  width: 100%;
 }
 
 img {
