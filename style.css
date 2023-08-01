@@ -828,7 +828,7 @@ padding-bottom: 5%;
     justify-content: center;
     gap: 5%;
     align-items: center;
-    background-color: black;
+    background-color: #121212;
     width: 100%;
     padding-top: 1.5%;
     padding-bottom: 1%;
@@ -929,6 +929,11 @@ padding-bottom: 5%;
 
 .projects p, .projects h3 {
   width: 100%;
+}
+
+.projects p {
+  margin-top: 0px;
+  margin-bottom: 32px;
 }
 
 img {
