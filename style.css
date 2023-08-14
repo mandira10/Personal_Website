@@ -928,6 +928,31 @@ padding-bottom: 5%;
   display: block; /* Displayed when the 'active' class is added */
 }
 
+.info p  {
+    text-align: center; /* Center the text */
+    font-size: calc(8px + (16 - 8) * ((100vw - 320px) / (1920 - 320)));
+    margin-top: 10px;    /* Add space between the image and text */
+}
+
+.loading p {
+  text-align: center; /* Center the text */
+  font-size: calc(8px + (16 - 8) * ((100vw - 320px) / (1920 - 320)));
+}
+
+.react-text {
+  padding-top: calc(8px + (25 - 8) * ((100vw - 320px) / (1920 - 320)));
+  margin-top: 0px;
+}
+
+.haskell-text {
+  padding-top: calc(8px + (16 - 8) * ((100vw - 320px) / (1920 - 320)));
+}
+
+.firebase-text {
+  margin-top: 5px;
+ }
+
+
 .projects img{
   width: 100%;
   height: auto;
