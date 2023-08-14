@@ -857,7 +857,7 @@ padding-bottom: 5%;
 .container2 img {
   width: 100%;
   height: auto;
-  border-radius: 10px;
+  border-radius: calc(8px + (16 - 8) * ((100vw - 320px) / (1920 - 320)));
 }
 
 @media (max-width: 960px) { /* Adjust the breakpoint as needed */
@@ -866,7 +866,7 @@ padding-bottom: 5%;
   }
 
   .container2 .info, .container2 .loading {
-    width: 17%;
+    width: 15%;
     padding: 4%;
   }
 }
