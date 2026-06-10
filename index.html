@@ -1,201 +1,570 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Efe Çarkçıoğlu - Web Developer</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico?">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Efe — One Journey, Three Cities</title>
+<meta name="description" content="A personal journey through Istanbul, Bremen and Sydney.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   EFE — ONE JOURNEY, THREE CITIES
+   Cinematic scroll-driven parallax. Photos only, no 3D.
+   To swap media: search for "MEDIA:" comments below.
+   Any .plane-media <img> can be replaced with:
+   <video class="plane-media" autoplay muted loop playsinline src="..."></video>
+   ============================================================ */
+
+:root{
+  --ink:        #0a0b0d;   /* film black */
+  --paper:      #ece8df;   /* warm projector white */
+  --paper-dim:  #97928a;   /* secondary text */
+  --hairline:   rgba(236,232,223,.16);
+
+  /* chapter grades */
+  --ist:        #e0a058;   /* Istanbul — golden hour amber */
+  --bre:        #82a9cc;   /* Bremen — blue hour steel */
+  --syd:        #43b8b0;   /* Sydney — harbour daylight teal */
+  --accent:     var(--ist);
+
+  --font-display:'Anton', sans-serif;
+  --font-body:  'Fraunces', serif;
+  --font-mono:  'IBM Plex Mono', monospace;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:auto; }
+body{
+  background:var(--ink);
+  color:var(--paper);
+  font-family:var(--font-body);
+  font-weight:340;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{ background:var(--accent); color:var(--ink); }
+
+img{ display:block; }
+a{ color:inherit; }
+
+/* ---------- film grain ---------- */
+.grain{
+  position:fixed; inset:-50%; width:200%; height:200%;
+  pointer-events:none; z-index:60; opacity:.07;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 1.4s steps(4) infinite;
+}
+@keyframes grain{
+  0%{transform:translate(0,0)} 25%{transform:translate(-2%,1.5%)}
+  50%{transform:translate(1.5%,-1%)} 75%{transform:translate(-1%,-2%)}
+  100%{transform:translate(0,0)}
+}
+
+/* ---------- letterbox bars ---------- */
+.letterbox{ position:fixed; left:0; right:0; height:0; background:#000; z-index:55; transition:height .8s cubic-bezier(.7,0,.3,1); }
+.letterbox.top{ top:0; } .letterbox.bottom{ bottom:0; }
+body.boxed .letterbox{ height:7vh; }
+
+/* ---------- fixed chrome ---------- */
+.wordmark{
+  position:fixed; top:26px; left:30px; z-index:50;
+  font-family:var(--font-mono); font-size:12px; letter-spacing:.34em;
+  color:var(--paper); mix-blend-mode:difference; text-decoration:none;
+}
+.wordmark span{ color:var(--accent); transition:color 1s; }
+
+.flight-rail{
+  position:fixed; right:30px; top:50%; transform:translateY(-50%);
+  z-index:50; display:flex; flex-direction:column; align-items:center; gap:0;
+  font-family:var(--font-mono); font-size:10px; letter-spacing:.22em;
+}
+.flight-rail .stop{
+  color:var(--paper-dim); padding:6px 0; writing-mode:vertical-rl;
+  transition:color .6s;
+}
+.flight-rail .stop.active{ color:var(--accent); }
+.flight-rail .leg{
+  width:1px; height:9vh; background:var(--hairline); position:relative; overflow:hidden;
+}
+.flight-rail .leg i{
+  position:absolute; left:0; top:0; width:100%; height:0%;
+  background:var(--accent); transition:background 1s;
+}
+
+/* ---------- common stage / planes ---------- */
+section.scene{ position:relative; }
+.stage{
+  position:sticky; top:0; height:100vh; height:100svh;
+  overflow:hidden; display:flex; align-items:center; justify-content:center;
+}
+.plane{ position:absolute; will-change:transform; }
+.plane-media{
+  width:100%; height:100%; object-fit:cover;
+}
+.bgplane{ inset:-12% 0; height:124%; width:100%; }
+.bgplane::after{ /* grade + vignette */
+  content:""; position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse at 50% 42%, transparent 38%, rgba(10,11,13,.72) 100%),
+    linear-gradient(to top, rgba(10,11,13,.92) 0%, rgba(10,11,13,.18) 30%, rgba(10,11,13,.18) 72%, rgba(10,11,13,.85) 100%);
+}
+.grade{ position:absolute; inset:0; mix-blend-mode:soft-light; opacity:.55; pointer-events:none; }
+
+/* ---------- prologue ---------- */
+#prologue{ height:150vh; }
+#prologue .stage{ background:var(--ink); }
+.prologue-inner{ display:flex; flex-direction:column; align-items:center; gap:2.6vh; will-change:transform,opacity; }
+.prologue-name{
+  font-family:var(--font-body); font-weight:420;
+  font-size:clamp(26px, 3.6vw, 44px);
+  letter-spacing:.04em; line-height:1.1; text-align:center;
+}
+.prologue-role{
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.5em;
+  text-transform:uppercase; color:var(--paper-dim);
+  margin-bottom:3vh;
+}
+.prologue-route{
+  font-family:var(--font-mono); font-size:clamp(11px,1.4vw,14px);
+  letter-spacing:.3em; color:var(--paper-dim); display:flex; gap:1.6em; align-items:center;
+}
+.prologue-route b{ font-weight:500; color:var(--paper); }
+.prologue-route .arrow{ color:var(--accent); }
+.scroll-cue{
+  position:absolute; bottom:6vh; left:50%; transform:translateX(-50%);
+  font-family:var(--font-mono); font-size:10px; letter-spacing:.4em; color:var(--paper-dim);
+  display:flex; flex-direction:column; align-items:center; gap:12px;
+}
+.scroll-cue::after{
+  content:""; width:1px; height:54px; background:linear-gradient(var(--paper-dim), transparent);
+  animation:cue 2.2s ease-in-out infinite;
+}
+@keyframes cue{ 0%,100%{transform:scaleY(.4); transform-origin:top; opacity:.4} 50%{transform:scaleY(1); opacity:1} }
+
+/* ---------- chapters ---------- */
+.chapter{ height:260vh; }
+.slate{
+  position:absolute; top:max(11vh, 86px); left:clamp(20px,6vw,90px); z-index:6;
+  font-family:var(--font-mono); font-size:9.5px; letter-spacing:.28em;
+  color:rgba(236,232,223,.55); text-transform:uppercase;
+  border-left:1px solid color-mix(in srgb, var(--chapter-accent) 55%, transparent);
+  padding-left:12px; line-height:2; opacity:.75;
+}
+.slate .dim{ color:rgba(236,232,223,.35); display:block; }
+
+.cityname{
+  position:absolute; z-index:5; left:0; width:100%;
+  bottom:7vh;
+  font-family:var(--font-display); text-transform:uppercase;
+  font-size:clamp(76px, 17vw, 280px); line-height:.86;
+  letter-spacing:.005em; padding-left:clamp(18px,5.4vw,84px);
+  color:var(--paper);
+  text-shadow:0 10px 60px rgba(0,0,0,.55);
+  pointer-events:none;
+}
+.cityname .index{
+  display:block; font-family:var(--font-mono); font-size:clamp(10px,1.1vw,13px);
+  letter-spacing:.5em; color:var(--chapter-accent); margin-bottom:1.6vh;
+}
+
+.copyblock{
+  position:absolute; z-index:7;
+  right:clamp(20px,7vw,110px); top:50%; transform:translateY(-50%);
+  width:min(380px, 78vw);
+  background:rgba(7,8,10,.38);
+  backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);
+  border-left:2px solid var(--chapter-accent);
+  padding:clamp(18px,2vw,26px) clamp(18px,2.2vw,28px);
+  box-shadow:0 16px 50px rgba(0,0,0,.3);
+}
+.copyblock p{
+  font-size:clamp(13px,1.05vw,15px); line-height:1.8; color:#e3e0d8;
+  text-shadow:0 1px 10px rgba(0,0,0,.45);
+}
+.copyblock p+p{ margin-top:1em; }
+.copyblock p strong{ font-weight:560; color:var(--chapter-accent); }
+
+/* reveal states (JS toggles .on) */
+.reveal{ opacity:0; transform:translateY(36px); transition:opacity 1s ease, transform 1.1s cubic-bezier(.2,.7,.2,1); }
+.reveal.on{ opacity:1; transform:translateY(0); }
+.copyblock.reveal{ transform:translateY(calc(-50% + 36px)); }
+.copyblock.reveal.on{ transform:translateY(-50%); }
+
+/* per-chapter accent variables */
+#istanbul{ --chapter-accent:var(--ist); }
+#bremen  { --chapter-accent:var(--bre); }
+#sydney  { --chapter-accent:var(--syd); }
+#istanbul .grade{ background:linear-gradient(160deg, #ff9a3c, #7a2c12); }
+#bremen   .grade{ background:linear-gradient(160deg, #1d3a5f, #0b1626); opacity:.5; }
+#sydney   .grade{ background:linear-gradient(160deg, #2dd4c5, #0c5b66); opacity:.35; }
+
+/* ---------- flight interstitials ---------- */
+.flight{ height:130vh; }
+.flight .stage{ background:var(--ink); }
+.flight-board{
+  width:min(900px, 86vw); text-align:center;
+}
+.flight-codes{
+  display:flex; justify-content:space-between; align-items:baseline;
+  font-family:var(--font-display); font-size:clamp(44px,8vw,110px);
+  text-transform:uppercase; line-height:1;
+}
+.flight-codes .to{ color:transparent; -webkit-text-stroke:1px var(--paper); }
+.flight-path{ width:100%; height:90px; margin:2vh 0 3vh; overflow:visible; }
+.flight-path .dash{
+  fill:none; stroke:var(--paper-dim); stroke-width:1.5; stroke-dasharray:6 8; opacity:.5;
+}
+.flight-path .draw{
+  fill:none; stroke-width:2;
+}
+.flight-path .craft{ font-size:18px; }
+.flight-meta{
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.34em;
+  color:var(--paper-dim); text-transform:uppercase; display:flex; justify-content:center; gap:3.5em; flex-wrap:wrap;
+}
+
+/* ---------- epilogue ---------- */
+#epilogue{ min-height:100vh; display:flex; align-items:center; justify-content:center; position:relative; padding:18vh 6vw; }
+.epilogue-inner{ text-align:center; max-width:760px; }
+.epilogue-kicker{ font-family:var(--font-mono); font-size:11px; letter-spacing:.5em; color:var(--syd); text-transform:uppercase; margin-bottom:3vh; }
+.epilogue-title{
+  font-family:var(--font-display); text-transform:uppercase;
+  font-size:clamp(40px,7.5vw,108px); line-height:.95; margin-bottom:4vh;
+}
+.epilogue-title em{ font-style:normal; color:transparent; -webkit-text-stroke:1px var(--paper); }
+.epilogue-copy{ color:var(--paper-dim); font-size:clamp(15px,1.4vw,18px); line-height:1.8; margin-bottom:6vh; }
+.contact-row{ display:flex; gap:clamp(14px,3vw,34px); justify-content:center; flex-wrap:wrap; }
+.contact-row a{
+  font-family:var(--font-mono); font-size:12px; letter-spacing:.26em; text-transform:uppercase;
+  text-decoration:none; color:var(--paper); border:1px solid var(--hairline);
+  padding:14px 26px; transition:border-color .4s, color .4s, background .4s;
+}
+.contact-row a:hover, .contact-row a:focus-visible{ border-color:var(--syd); color:var(--syd); }
+.footer-note{
+  position:absolute; bottom:4vh; left:0; width:100%; text-align:center;
+  font-family:var(--font-mono); font-size:10px; letter-spacing:.3em; color:#55524c;
+}
+
+/* ---------- accessibility / responsive ---------- */
+:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+
+@media (max-width:760px){
+  .flight-rail{ display:none; }
+  .copyblock{
+    right:auto; left:50%; top:auto; bottom:30vh;
+    transform:translateX(-50%);
+    width:min(440px, 88vw);
+  }
+  .copyblock.reveal{ transform:translate(-50%, 36px); }
+  .copyblock.reveal.on{ transform:translate(-50%, 0); }
+  .cityname{ bottom:5vh; }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .grain, .scroll-cue::after{ animation:none; }
+  .plane{ transform:none !important; }
+  .reveal{ opacity:1; transform:none; transition:none; }
+  .copyblock.reveal, .copyblock.reveal.on{ transform:translateY(-50%); }
+  .letterbox{ transition:none; }
+}
+</style>
 </head>
-
 <body>
-    <div class="container" id="container">
-        <div class="header">
-            <div class="header-left">
-            </div>
-            <div class="header-right">
-                <a href="#" data-target="#container">Home</a>
-                <a href="#" data-target="#container3">About</a>
-                <a href="#" data-target="#projects">Projects</a>
-                <a href="#" data-target="#footer">Contact</a>
-                <div class="language-dropdown">
-                    <a href="#" class="language-link">Language</a>
-                    <div class="flags">
-                        <a href="index.html"><img src="images/flag-en.png" alt="English" width="25"></a>
-                        <a href="index-de.html"><img src="images/flag-de.png" alt="Deutsch" width="25"></a>
-                        <a href="index-tr.html"><img src="images/flag-tr.png" alt="Türkçe" width="25"></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="content flex-grow">
-            <div class="content-left">
-                <div class="name-text"><span>Efe Çarkçıoğlu</span></div>
-                <div class="paragraph-light"><span>Student, Web Developer</span></div>
-                <h1 class="heading-jumbo">Hey there! I like solving problems and building things.</h1>
-            </div>
-        </div>
-        <div class="section">
-            <div class="container3" id="container3">
-                <p class="paragraph-light">After achieving a top 1% score in Turkey's nationwide High School Placement Exam, I was motivated to take on new challenges. I chose Germany for my university education, attracted by its many opportunities in technology and innovation. Currently, I'm studying computer science at the <a href="https://www.uni-bremen.de/" target="_blank">University of Bremen</a>, and I'll be writing my bachelor thesis next year. My interest in programming continues to grow, and I'm looking forward to improving my skills through practical experience.</p>
-                <p>My learning journey keeps moving forward, and I'm actively working with modern technologies like <a href="https://www.javascript.com/" target="_blank">JavaScript</a>, <a href="https://www.typescriptlang.org/" target="_blank">TypeScript</a>, <a href="https://angular.io/" target="_blank">Angular</a>, <a href="https://react.dev/" target="_blank">React</a> and <a href="https://firebase.google.com/" target="_blank">Firebase</a>.</p>
-            </div>                      
-        </div>
 
-        <div class="content2 flex-grow">
-            <div class="container2">
-                <div class="info">
-                    <a href="https://www.java.com/" target="_blank">
-                        <img src="images/java.png" alt="Java" width="120">
-                        <p>Java</p>
-                    </a>
-                </div>
-                <div class="info">
-                    <a href="https://www.haskell.org/" target="_blank">
-                        <img src="images/haskell.png" alt="Haskell" width="160" class="haskell-image">
-                        <p class="haskell-text">Haskell</p>
-                    </a>
-                </div>
-                <div class="info">
-                    <a href="https://www.w3.org/html/" target="_blank">
-                        <img src="images/html.png" alt="HTML" width="120">
-                        <p>HTML</p>
-                    </a>
-                </div>
-                <div class="info">
-                    <a href="https://www.w3.org/Style/CSS/Overview.en.html" target="_blank">
-                        <img src="images/css.png" alt="CSS" width="120">
-                        <p>CSS</p>
-                    </a>
-                </div>
-                <div class="info">
-                    <a href="https://www.postgresql.org/" target="_blank">
-                        <img src="images/sql.png" alt="SQL" width="125">
-                        <p>SQL</p>
-                    </a>
-                </div>
-                <div class="info">
-                    <a href="https://git-scm.com//" target="_blank">
-                        <img src="images/git2.png" alt="GIT" width="125">
-                        <p>Git</p>
-                    </a>
-                </div>
-                <div class="info">
-                    <a href="https://www.linux.org/" target="_blank">
-                        <img src="images/linux.png" alt="Linux" width="110">
-                        <p>Linux</p>
-                    </a>
-                </div>
-                <div class="loading">
-                    <a href="https://www.javascript.com/" target="_blank">
-                        <img src="images/javascript.png" alt="JavaScript" width="120">
-                        <p class="js-text">JavaScript</p>
-                    </a>
-                </div>
-                <div class="loading">
-                    <a href="https://www.typescriptlang.org/" target="_blank">
-                        <img src="images/typescript.png" alt="TypeScript" width="120">
-                        <p>TypeScript</p>
-                    </a>
-                </div>
-                <div class="loading">
-                    <a href="https://angular.io/" target="_blank">
-                        <img src="images/angular.png" alt="Angular" width="130">
-                        <p>Angular</p>
-                    </a>
-                </div>
-                <div class="loading">
-                    <a href="https://react.dev/" target="_blank">
-                        <img src="images/react.png" alt="React" width="140">
-                        <p class="react-text">React</p>
-                    </a>
-                </div>
-                <div class="loading">
-                    <a href="https://firebase.google.com/" target="_blank">
-                        <img src="images/firebase.png" alt="Firebase" width="120">
-                        <p class="firebase-text">Firebase</p>
-                    </a>
-                </div>
-            </div>
-        </div>
+<div class="grain" aria-hidden="true"></div>
+<div class="letterbox top" aria-hidden="true"></div>
+<div class="letterbox bottom" aria-hidden="true"></div>
 
-        <div class="projects" id="projects">
-            <ul>
-                <li>
-                    <a href="https://govtech-gules.vercel.app/company/2" target="_blank">
-                        <video width="100%" autoplay loop muted playsinline>
-                            <source src="videos/app1.mp4" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                    </a>
-                    <h3><a href="https://govtech-gules.vercel.app" target="_blank">Digital Twin</a></h3>
-                <p>
-                Built a digital twin for our data science project for the GovTech course and additionally implemented different machine learning algorithms for the predictive maintenance of the wind turbines. I was one of the 3-person development team. We learned new technologies, such as Python, ML algorithms, Javascript libraries and React.
-                </p>
-                </li>
-                <li>
-                    <a href="https://mandira10.github.io/angular-tour-of-heroes" target="_blank">
-                        <img src="images/angular_app.gif" alt="Project Animation" width="100%">
-                    </a>
-                    <h3><a href="https://mandira10.github.io/angular-tour-of-heroes" target="_blank">Tour of Heroes</a></h3>
-                <p>
-                The "Tour of Heroes" project is a dynamic single-page application crafted with Angular and TypeScript. Created to demonstrate core features of Angular, this project showcases essential concepts like components, services, directives, and more. Users can explore a list of fictional heroes, view their details, and make real-time edits. Utilizing Angular's powerful data-binding and dependency injection, it allows seamless interaction with mock data.
-                </p>
-                </li>
-                <li>
-                    <a href="https://mandira10.github.io/estate-agent-app/" target="_blank">
-                        <img src="images/homes.png" alt="Project Image" width="100%">
-                    </a>
-                    <h3><a href="https://mandira10.github.io/estate-agent-app/" target="_blank">Estate Agent App</a></h3>
-                    <p>
-                        The Angular Homes Project provides a comprehensive example of building an Angular application that lists and details houses for rent. Key aspects include creating standalone components, implementing inputs, utilizing Angular templates and handling data binding. Features covered in the project include property binding, interpolation, dynamic data display using ngFor, dependency injection, routing, connecting a details page and adding user forms. A unique aspect of this project is the addition of search functionality and the integration of HTTP with an API to simulate server communication.                     </p>
-                </li>
-                <li>
-                    <a href="https://github.com/mandira10/KarteikartenAG" target="_blank"><img src="images/app3.jpg"></a>
-                    <h3>
-                        <a href="https://github.com/mandira10/KarteikartenAG" target="_blank">KarteiKartenAG</a>
-                    </h3>
-                <p>
-                Developed an Anki-like flashcards application for our Software Project course at the university. I was one of the 5-person development team. During the project, I had a opportunity to improve my Java, Git, SQL and Hibernate skills, building a database with a web server and a local storage. We got an A+.
-                </p>
-                </li>
-                <li>
-                    <a href="https://mandira10.github.io/Project_Landing_Page" target="_blank"><img src="images/app2.png"></a>
-                    <h3>
-                    <a href="https://mandira10.github.io/Project_Landing_Page" target="_blank">Landing Page</a>
-                </h3>
-                <p>
-                Designed and implemented a landing page. It was one of the challanges that I made at the Odin Project Web Development course. I practiced my Flexbox, HTML and CSS skills to build and deploy a website. I also used and became comfortable with Linux (Ubuntu) and Git environments.
-                </p>
-                </li>
-                <li>
-                    <a href="https://github.com/mandira10/tab-remover-chrome-extension" target="_blank"><img src="images/app4.png"></a>
-                    <h3>
-                        <a href="https://github.com/mandira10/tab-remover-chrome-extension" target="_blank">Tab Saver</a>
-                    </h3>
-                <p>
-                Built a chrome extension during my Scrimba Interactive Javascript course. I used Javascript, HTML and CSS to code this project and practiced eventListeners, template strings, DOM manipulation, local storage and JSON.parse() and JSON.stringify().
-                </p>
-                </li>
-            </ul>
-        </div>
+<a class="wordmark" href="#prologue">EFE<span> /</span> JOURNEY</a>
 
-        <div class="footer" id="footer">
-        <a href="https://www.linkedin.com/in/efe-carkcioglu/" target="_blank">
-            <img src="images/in.png" alt class="image-1" width="50">
-        </a>
-        <a href="https://github.com/mandira10" class="inline-block" target="_blank">
-            <img src="images/git.png" alt class="image-2" width="50">
-        </a>
-        <a href="./Efe_Carkcioglu_Resume.pdf" class="inline-block" download>
-            <img src="images/file.png" alt class="image-3" width="50">
-        </a>
-        </div>
+<nav class="flight-rail" aria-label="Journey progress">
+  <span class="stop" data-stop="istanbul">IST</span>
+  <span class="leg"><i data-leg="0"></i></span>
+  <span class="stop" data-stop="bremen">BRE</span>
+  <span class="leg"><i data-leg="1"></i></span>
+  <span class="stop" data-stop="sydney">SYD</span>
+</nav>
+
+<!-- ============ PROLOGUE ============ -->
+<section class="scene" id="prologue">
+  <div class="stage">
+    <div class="prologue-inner">
+      <h1 class="prologue-name reveal">Efe Carkcioglu</h1>
+      <p class="prologue-role reveal">Software Engineer</p>
+      <p class="prologue-route reveal">
+        <b>Istanbul</b> <span class="arrow">⟶</span>
+        <b>Bremen</b> <span class="arrow">⟶</span>
+        <b>Sydney</b>
+      </p>
     </div>
-    
-    <script src="main.js"></script>
+    <div class="scroll-cue">Scroll</div>
+  </div>
+</section>
 
+<!-- ============ CHAPTER 01 — ISTANBUL ============ -->
+<section class="scene chapter" id="istanbul" data-grade="ist">
+  <div class="stage">
+    <div class="plane bgplane" data-speed="0.18" data-zoom="1.16">
+      <!-- MEDIA: Istanbul background — Bosphorus Bridge at sunset, sea and skyline (Wikimedia Commons, CC) -->
+      <img class="plane-media" src="assets/istanbul-bosphorus.jpg" alt="The Bosphorus Bridge at sunset with the Istanbul skyline and the sea below" loading="eager">
+      <div class="grade"></div>
+    </div>
+
+
+
+    <div class="slate reveal">
+      Reel 01 — Origin
+      <span class="dim">41.0082° N · 28.9784° E</span>
+    </div>
+
+    <div class="copyblock reveal">
+      <p>Ferries crossing the Bosphorus, cats on every corner, and a first keyboard that turned tinkering into a calling. Istanbul taught me to live between worlds — and to build bridges between them.</p>
+      <p>Every journey needs a harbour to leave from. Mine was loud, golden, and fifteen million people strong.</p>
+    </div>
+
+    <h2 class="cityname" data-drift="1">
+      <span class="index">Chapter 01 · 1999 — 2018</span>
+      Istanbul
+    </h2>
+  </div>
+</section>
+
+<!-- ============ FLIGHT IST → BRE ============ -->
+<section class="scene flight" data-leg="0">
+  <div class="stage">
+    <div class="flight-board">
+      <div class="flight-codes"><span>IST</span><span class="to">BRE</span></div>
+      <svg class="flight-path" viewBox="0 0 900 90" preserveAspectRatio="none" aria-hidden="true">
+        <path class="dash" d="M10,80 Q450,-40 890,80"/>
+        <path class="draw" d="M10,80 Q450,-40 890,80" stroke="var(--ist)" pathLength="1"/>
+        <text class="craft" x="1" y="86" fill="var(--ist)">✈</text>
+      </svg>
+      <div class="flight-meta">
+        <span>2,288 km north-west</span><span>One suitcase</span><span>A new language</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 02 — BREMEN ============ -->
+<section class="scene chapter" id="bremen" data-grade="bre">
+  <div class="stage">
+    <div class="plane bgplane" data-speed="0.18" data-zoom="1.16">
+      <!-- MEDIA: Bremen background — Rathaus & Dom at blue hour (local copy; source: Wikimedia Commons, M. Süßen, CC BY-SA 4.0) -->
+      <img class="plane-media" src="assets/bremen-rathaus.jpg" alt="Bremen town hall and cathedral lit up at blue hour" loading="lazy">
+      <div class="grade"></div>
+    </div>
+
+
+
+    <div class="slate reveal">
+      Reel 02 — The craft years
+      <span class="dim">53.0793° N · 8.8017° E</span>
+    </div>
+
+    <div class="copyblock reveal">
+      <p>Bremen is a city that rewards patience: brick gothic, drizzle, and the Weser moving slowly toward the sea. Here I learned to build software at scale — platforms carrying ticket sales for theatres and concert halls across Europe, where every line of code had an audience waiting.</p>
+      <p>Some cities teach you to dream. This one taught me to ship.</p>
+    </div>
+
+    <h2 class="cityname" data-drift="1">
+      <span class="index">Chapter 02 · 2018 — 2026</span>
+      Bremen
+    </h2>
+  </div>
+</section>
+
+<!-- ============ FLIGHT BRE → SYD ============ -->
+<section class="scene flight" data-leg="1">
+  <div class="stage">
+    <div class="flight-board">
+      <div class="flight-codes"><span>BRE</span><span class="to">SYD</span></div>
+      <svg class="flight-path" viewBox="0 0 900 90" preserveAspectRatio="none" aria-hidden="true">
+        <path class="dash" d="M10,80 Q450,-40 890,80"/>
+        <path class="draw" d="M10,80 Q450,-40 890,80" stroke="var(--bre)" pathLength="1"/>
+        <text class="craft" x="1" y="86" fill="var(--bre)">✈</text>
+      </svg>
+      <div class="flight-meta">
+        <span>16,000 km south-east</span><span>Across the equator</span><span>July 2026</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 03 — SYDNEY ============ -->
+<section class="scene chapter" id="sydney" data-grade="syd">
+  <div class="stage">
+    <div class="plane bgplane" data-speed="0.18" data-zoom="1.16">
+      <!-- MEDIA: Sydney background — harbour in full daylight (local copy; source: Unsplash) -->
+      <img class="plane-media" src="assets/sydney-harbour.jpg" alt="Sydney Harbour in bright daylight with ferries leaving white wakes" loading="lazy">
+      <div class="grade"></div>
+    </div>
+
+
+
+    <div class="slate reveal">
+      Reel 03 — The next horizon
+      <span class="dim">33.8688° S · 151.2093° E</span>
+    </div>
+
+    <div class="copyblock reveal">
+      <p>In 2026 the journey crosses the equator. Sydney is where the story turns from past tense to present: new team, new product, the Pacific instead of the North Sea, and everything still to build.</p>
+      <p>The best chapters are the ones you haven't finished writing.</p>
+    </div>
+
+    <h2 class="cityname" data-drift="1">
+      <span class="index">Chapter 03 · 2026 — present</span>
+      Sydney
+    </h2>
+  </div>
+</section>
+
+<!-- ============ EPILOGUE ============ -->
+<section id="epilogue">
+  <div class="epilogue-inner">
+    <p class="epilogue-kicker reveal">Epilogue</p>
+    <h2 class="epilogue-title reveal">The journey<br><em>continues</em></h2>
+    <p class="epilogue-copy reveal">
+      Three cities, three continents, one craft carried the whole way.
+      If our paths should cross next — in Sydney or anywhere else — say hello.
+    </p>
+    <div class="contact-row reveal">
+      <!-- EDIT: replace with your real links -->
+      <a href="mailto:hello@example.com">Email</a>
+      <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </div>
+  <p class="footer-note">EFE · IST — BRE — SYD · © 2026</p>
+</section>
+
+<script>
+(() => {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- reveal on enter ---------- */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); });
+  }, { threshold: 0.25 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* ---------- chapter accent + rail state ---------- */
+  const root = document.documentElement;
+  const accents = { ist: 'var(--ist)', bre: 'var(--bre)', syd: 'var(--syd)' };
+  const stopFor = { ist: 'istanbul', bre: 'bremen', syd: 'sydney' };
+  const chapterIO = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const g = e.target.dataset.grade;
+      root.style.setProperty('--accent', accents[g]);
+      document.querySelectorAll('.flight-rail .stop').forEach(s =>
+        s.classList.toggle('active', s.dataset.stop === stopFor[g]));
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.chapter').forEach(c => chapterIO.observe(c));
+
+  /* ---------- letterbox during flight interstitials ---------- */
+  const visible = new Map();
+  const boxIO = new IntersectionObserver((entries) => {
+    entries.forEach(e => visible.set(e.target, e.isIntersecting && e.intersectionRatio >= 0.3));
+    const anyFlight = [...visible.entries()].some(([el, v]) => v && el.classList.contains('flight'));
+    document.body.classList.toggle('boxed', anyFlight);
+  }, { threshold: [0, 0.3] });
+  document.querySelectorAll('.flight').forEach(s => boxIO.observe(s));
+
+  if (reduceMotion) return; // parallax & path drawing disabled
+
+  /* ---------- scroll-driven parallax (lerped) ---------- */
+  const scenes = [...document.querySelectorAll('.chapter')].map(sec => ({
+    sec,
+    planes: [...sec.querySelectorAll('[data-speed]')],
+    title: sec.querySelector('.cityname')
+  }));
+  const flights = [...document.querySelectorAll('.flight')].map(sec => ({
+    sec,
+    draw: sec.querySelector('.draw'),
+    craft: sec.querySelector('.craft'),
+    rail: document.querySelector(`.flight-rail [data-leg="${sec.dataset.leg}"]`)
+  }));
+  flights.forEach(f => { f.len = 1; f.draw.style.strokeDasharray = '1'; f.draw.style.strokeDashoffset = '1'; });
+
+  const prologueSec = document.getElementById('prologue');
+  const prologueInner = prologueSec.querySelector('.prologue-inner');
+  const prologueCue = prologueSec.querySelector('.scroll-cue');
+
+  // quadratic bezier point for the plane glyph
+  const qPoint = (t) => {
+    const p0 = {x:10,y:80}, p1 = {x:450,y:-40}, p2 = {x:890,y:80};
+    const x = (1-t)*(1-t)*p0.x + 2*(1-t)*t*p1.x + t*t*p2.x;
+    const y = (1-t)*(1-t)*p0.y + 2*(1-t)*t*p1.y + t*t*p2.y;
+    return {x, y};
+  };
+
+  let targetY = window.scrollY, currentY = targetY;
+  const lerp = (a, b, n) => a + (b - a) * n;
+
+  function frame() {
+    targetY = window.scrollY;
+    currentY = lerp(currentY, targetY, 0.085);          // cinematic easing
+    if (Math.abs(currentY - targetY) < 0.05) currentY = targetY;
+    const vh = window.innerHeight;
+
+    { // prologue: name lifts and dissolves as soon as scrolling starts
+      const r = prologueSec.getBoundingClientRect();
+      const top = r.top + (targetY - currentY);
+      const total = r.height - vh;
+      const p = Math.min(1, Math.max(0, -top / total));
+      const fade = Math.max(0, 1 - p * 1.5);
+      prologueInner.style.opacity = fade.toFixed(3);
+      prologueInner.style.transform = `translate3d(0, ${(-p * 14).toFixed(2)}vh, 0) scale(${(1 - p * 0.06).toFixed(3)})`;
+      prologueCue.style.opacity = Math.max(0, 1 - p * 3).toFixed(3);
+    }
+
+    scenes.forEach(({sec, planes, title}) => {
+      const r = sec.getBoundingClientRect();
+      // shift rect by the lerp delta so motion is smoothed
+      const top = r.top + (targetY - currentY);
+      if (top > vh || top + r.height < 0) return;
+      const total = r.height - vh;
+      const p = Math.min(1, Math.max(0, -top / total)); // 0..1 through the pin
+
+      planes.forEach(pl => {
+        const speed = parseFloat(pl.dataset.speed);
+        const zoom = pl.dataset.zoom ? lerp(parseFloat(pl.dataset.zoom), 1.02, p) : 1;
+        const y = (p - 0.5) * -2 * speed * vh * 0.55;
+        pl.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0) scale(${zoom})`;
+      });
+      if (title) {
+        const drift = (p - 0.5) * -8;                   // slow horizontal drift, in vw
+        const fade = p < 0.85 ? 1 : 1 - (p - 0.85) / 0.15;
+        title.style.transform = `translate3d(${drift.toFixed(2)}vw, 0, 0)`;
+        title.style.opacity = fade.toFixed(2);
+      }
+    });
+
+    flights.forEach(({sec, draw, craft, rail}) => {
+      const r = sec.getBoundingClientRect();
+      const top = r.top + (targetY - currentY);
+      let p;
+      if (top > vh) p = 0;
+      else if (top + r.height < 0) p = 1;
+      else {
+        const total = r.height - vh;
+        p = Math.min(1, Math.max(0, -top / total));
+      }
+      draw.style.strokeDashoffset = (1 - p).toFixed(3);
+      const pt = qPoint(p);
+      craft.setAttribute('x', pt.x - 9);
+      craft.setAttribute('y', pt.y + 6);
+      if (rail) rail.style.height = (p * 100).toFixed(1) + '%';
+    });
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
 </body>
 </html>
