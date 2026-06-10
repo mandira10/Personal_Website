@@ -477,7 +477,8 @@ section.scene{ position:relative; }
   const scenes = [...document.querySelectorAll('.chapter')].map(sec => ({
     sec,
     planes: [...sec.querySelectorAll('[data-speed]')],
-    title: sec.querySelector('.cityname')
+    title: sec.querySelector('.cityname'),
+    fadeEls: [sec.querySelector('.copyblock'), sec.querySelector('.slate')].filter(Boolean)
   }));
   const flights = [...document.querySelectorAll('.flight')].map(sec => ({
     sec,
@@ -519,7 +520,7 @@ section.scene{ position:relative; }
       prologueCue.style.opacity = Math.max(0, 1 - p * 3).toFixed(3);
     }
 
-    scenes.forEach(({sec, planes, title}) => {
+    scenes.forEach(({sec, planes, title, fadeEls}) => {
       const r = sec.getBoundingClientRect();
       // shift rect by the lerp delta so motion is smoothed
       const top = r.top + (targetY - currentY);
@@ -539,6 +540,17 @@ section.scene{ position:relative; }
         title.style.transform = `translate3d(${drift.toFixed(2)}vw, 0, 0)`;
         title.style.opacity = fade.toFixed(2);
       }
+      // copy + slate dissolve a beat before the city name, leaving the photo alone
+      fadeEls.forEach(el => {
+        if (p > 0.72) {
+          const fade = Math.max(0, 1 - (p - 0.72) / 0.2); // gone by p = 0.92
+          el.style.transition = 'none';                    // track scroll directly
+          el.style.opacity = fade.toFixed(3);
+        } else if (el.style.opacity !== '') {
+          el.style.transition = '';                        // hand control back to .reveal
+          el.style.opacity = '';
+        }
+      });
     });
 
     flights.forEach(({sec, draw, craft, rail}) => {
