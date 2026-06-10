@@ -212,14 +212,14 @@ section.scene{ position:relative; }
   text-transform:uppercase; line-height:1;
 }
 .flight-codes .to{ color:transparent; -webkit-text-stroke:1px var(--paper); }
-.flight-path{ width:100%; height:90px; margin:2vh 0 3vh; overflow:visible; }
+.flight-path{ width:100%; height:auto; margin:2vh 0 3vh; overflow:visible; }
 .flight-path .dash{
   fill:none; stroke:var(--paper-dim); stroke-width:1.5; stroke-dasharray:6 8; opacity:.5;
 }
 .flight-path .draw{
   fill:none; stroke-width:2;
 }
-.flight-path .craft{ font-size:18px; }
+
 .flight-meta{
   font-family:var(--font-mono); font-size:11px; letter-spacing:.34em;
   color:var(--paper-dim); text-transform:uppercase; display:flex; justify-content:center; gap:3.5em; flex-wrap:wrap;
@@ -253,10 +253,13 @@ section.scene{ position:relative; }
 @media (max-width:760px){
   .flight-rail{ display:none; }
   .copyblock{
-    right:auto; left:50%; top:auto; bottom:30vh;
+    right:auto; left:50%; top:auto; bottom:22vh;
     transform:translateX(-50%);
-    width:min(440px, 88vw);
+    width:min(340px, 80vw);
+    padding:13px 15px;
   }
+  .copyblock p{ font-size:12px; line-height:1.6; }
+  .copyblock p+p{ display:none; } /* mobile shows only the lead paragraph */
   .copyblock.reveal{ transform:translate(-50%, 36px); }
   .copyblock.reveal.on{ transform:translate(-50%, 0); }
   .cityname{ bottom:5vh; }
@@ -320,8 +323,8 @@ section.scene{ position:relative; }
     </div>
 
     <div class="copyblock reveal">
-      <p>Ferries crossing the Bosphorus, cats on every corner and a first keyboard that turned tinkering into a calling. Istanbul taught me to live between worlds — and to build bridges between them.</p>
-      <p>Every journey needs a harbour to leave from. Mine was loud, golden and fifteen million people strong.</p>
+      <p>Ferries crossing the Bosphorus, cats on every corner, and a first keyboard that turned tinkering into a calling. Istanbul taught me to live between worlds — and to build bridges between them.</p>
+      <p>Every journey needs a harbour to leave from. Mine was loud, golden, and fifteen million people strong.</p>
     </div>
 
     <h2 class="cityname" data-drift="1">
@@ -336,10 +339,10 @@ section.scene{ position:relative; }
   <div class="stage">
     <div class="flight-board">
       <div class="flight-codes"><span>IST</span><span class="to">BRE</span></div>
-      <svg class="flight-path" viewBox="0 0 900 90" preserveAspectRatio="none" aria-hidden="true">
+      <svg class="flight-path" viewBox="0 0 900 90" aria-hidden="true">
         <path class="dash" d="M10,80 Q450,-40 890,80"/>
         <path class="draw" d="M10,80 Q450,-40 890,80" stroke="var(--ist)" pathLength="1"/>
-        <text class="craft" x="1" y="86" fill="var(--ist)">✈</text>
+        <g class="craft" fill="var(--ist)" transform="translate(10,80) rotate(75)"><path transform="translate(-11.5,-12)" d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2,1.5V22l3.5-1l3.5,1v-1.5L13,19v-5.5L21,16z"/></g>
       </svg>
       <div class="flight-meta">
         <span>2,288 km north-west</span><span>One suitcase</span><span>A new language</span>
@@ -365,7 +368,7 @@ section.scene{ position:relative; }
     </div>
 
     <div class="copyblock reveal">
-      <p>Bremen is a city that rewards patience: brick gothic, drizzle and the Weser moving slowly toward the sea. Here I learned to build software at scale — platforms carrying ticket sales for theatres and concert halls across Europe, where every line of code had an audience waiting.</p>
+      <p>Bremen is a city that rewards patience: brick gothic, drizzle, and the Weser moving slowly toward the sea. Here I learned to build software at scale — platforms carrying ticket sales for theatres and concert halls across Europe, where every line of code had an audience waiting.</p>
       <p>Some cities teach you to dream. This one taught me to ship.</p>
     </div>
 
@@ -381,10 +384,10 @@ section.scene{ position:relative; }
   <div class="stage">
     <div class="flight-board">
       <div class="flight-codes"><span>BRE</span><span class="to">SYD</span></div>
-      <svg class="flight-path" viewBox="0 0 900 90" preserveAspectRatio="none" aria-hidden="true">
+      <svg class="flight-path" viewBox="0 0 900 90" aria-hidden="true">
         <path class="dash" d="M10,80 Q450,-40 890,80"/>
         <path class="draw" d="M10,80 Q450,-40 890,80" stroke="var(--bre)" pathLength="1"/>
-        <text class="craft" x="1" y="86" fill="var(--bre)">✈</text>
+        <g class="craft" fill="var(--bre)" transform="translate(10,80) rotate(75)"><path transform="translate(-11.5,-12)" d="M21,16v-2l-8-5V3.5C13,2.67,12.33,2,11.5,2S10,2.67,10,3.5V9l-8,5v2l8-2.5V19l-2,1.5V22l3.5-1l3.5,1v-1.5L13,19v-5.5L21,16z"/></g>
       </svg>
       <div class="flight-meta">
         <span>16,000 km south-east</span><span>Across the equator</span><span>July 2026</span>
@@ -410,7 +413,7 @@ section.scene{ position:relative; }
     </div>
 
     <div class="copyblock reveal">
-      <p>In 2026 the journey crosses the equator. Sydney is where the story turns from past tense to present: new team, new product, the Pacific instead of the North Sea and everything still to build.</p>
+      <p>In 2026 the journey crosses the equator. Sydney is where the story turns from past tense to present: new team, new product, the Pacific instead of the North Sea, and everything still to build.</p>
       <p>The best chapters are the ones you haven't finished writing.</p>
     </div>
 
@@ -425,16 +428,16 @@ section.scene{ position:relative; }
 <section id="epilogue">
   <div class="epilogue-inner">
     <p class="epilogue-kicker reveal">Epilogue</p>
-    <h2 class="epilogue-title reveal">The journey<br>continues</h2>
+    <h2 class="epilogue-title reveal">The journey<br><em>continues</em></h2>
     <p class="epilogue-copy reveal">
       Three cities, three continents, one craft carried the whole way.
       If our paths should cross next — in Sydney or anywhere else — say hello.
     </p>
     <div class="contact-row reveal">
       <!-- EDIT: replace with your real links -->
-      <a href="mailto:efemandira@gmail.com">Email</a>
-      <a href="https://github.com/mandira10" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://www.linkedin.com/in/efe-carkcioglu/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:hello@example.com">Email</a>
+      <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
     </div>
   </div>
   <p class="footer-note">EFE · IST — BRE — SYD · © 2026</p>
@@ -556,8 +559,8 @@ section.scene{ position:relative; }
       }
       draw.style.strokeDashoffset = (1 - p).toFixed(3);
       const pt = qPoint(p);
-      craft.setAttribute('x', pt.x - 9);
-      craft.setAttribute('y', pt.y + 6);
+      const deg = Math.atan2(-240 + 480 * p, 880) * 180 / Math.PI + 90;
+      craft.setAttribute('transform', `translate(${pt.x.toFixed(1)},${pt.y.toFixed(1)}) rotate(${deg.toFixed(1)})`);
       if (rail) rail.style.height = (p * 100).toFixed(1) + '%';
     });
 
