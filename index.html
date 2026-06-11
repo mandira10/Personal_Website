@@ -168,6 +168,7 @@ section.scene{ position:relative; }
   display:block; font-family:var(--font-mono); font-size:clamp(10px,1.1vw,13px);
   letter-spacing:.5em; color:var(--chapter-accent); margin-bottom:1.6vh;
 }
+.cityname .d-short{ display:none; }
 
 .copyblock{
   position:absolute; z-index:7;
@@ -258,6 +259,10 @@ section.scene{ position:relative; }
   #sydney   .plane-media{ object-position:15% 50%; }
   #bremen   .plane-media{ object-position:77.5% 50%; }
 
+  /* mobile: keep the dates, drop the gaps around the dash (BRE & SYD) */
+  .cityname .d-long{ display:none; }
+  .cityname .d-short{ display:inline; }
+
   .copyblock{
     right:auto; left:50%; top:auto; bottom:22vh;
     transform:translateX(-50%);
@@ -329,7 +334,7 @@ section.scene{ position:relative; }
     </div>
 
     <h2 class="cityname" data-drift="1">
-      <span class="index">Chapter 01 · 1999 — 2018</span>
+      <span class="index">Chapter 01<span class="dates"> · 1999 — 2018</span></span>
       Istanbul
     </h2>
   </div>
@@ -374,7 +379,7 @@ section.scene{ position:relative; }
     </div>
 
     <h2 class="cityname" data-drift="1">
-      <span class="index">Chapter 02 · 2018 — 2026</span>
+      <span class="index">Chapter 02<span class="dates"><span class="d-long"> · 2018 — 2026</span><span class="d-short"> · 2018—2026</span></span></span>
       Bremen
     </h2>
   </div>
@@ -419,7 +424,7 @@ section.scene{ position:relative; }
     </div>
 
     <h2 class="cityname" data-drift="1">
-      <span class="index">Chapter 03 · 2026 — present</span>
+      <span class="index">Chapter 03<span class="dates"><span class="d-long"> · 2026 — present</span><span class="d-short"> · 2026—present</span></span></span>
       Sydney
     </h2>
   </div>
